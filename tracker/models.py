@@ -30,7 +30,7 @@ class Company(models.Model):
         return self.name
 
 
-class Category_programm(models.Model):
+class CategoryProgramm(models.Model):
     name = models.CharField(max_length=60, verbose_name="Категория программы")
     description = models.TextField(max_length=200, blank=True, verbose_name="Описание")
 
@@ -42,8 +42,9 @@ class Programms(models.Model):
     name = models.CharField(max_length=100, verbose_name="Программа")
     #time_process = models.DurationField(verbose_name="Время")
     is_productive = models.BooleanField(default=False, verbose_name="Продуктивность")
-    category = models.ForeignKey(Category_programm, on_delete=PROTECT, verbose_name="Категория")
+    category = models.ForeignKey(CategoryProgramm, on_delete=PROTECT, verbose_name="Категория")
 
+    
 
     def __str__(self):
         return self.name
@@ -66,6 +67,9 @@ class Settings(models.Model):
     time_refresh = models.DurationField()
     fired = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.department.name
+
 class Client(models.Model):
     start_at = DateTimeField()
     end_at = DateTimeField()
@@ -77,6 +81,9 @@ class Client(models.Model):
     programms = models.ManyToManyField(Programms)
     settings = models.ForeignKey(Settings, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return '%s, %s' % (self.user.name, self.user.surname)
+
 
 class Screenshot(models.Model):
     date = models.DateTimeField(auto_now_add=True)
@@ -84,7 +91,7 @@ class Screenshot(models.Model):
     client = models.ForeignKey(Client, on_delete=PROTECT)
 
 
-class Category_sites(models.Model):
+class CategorySites(models.Model):
     name = models.CharField(max_length=100, verbose_name="Категория сайтов")
     description = models.TextField(max_length=200, verbose_name="Описание") 
 
@@ -92,6 +99,6 @@ class Category_sites(models.Model):
 class Sites(models.Model):
     url = models.URLField()
     time_url = models.DurationField()
-    category = models.ForeignKey(Category_sites, on_delete=PROTECT)
+    category = models.ForeignKey(CategorySites, on_delete=PROTECT)
     is_productive = models.BooleanField(default=False)
     
